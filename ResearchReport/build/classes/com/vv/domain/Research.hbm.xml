@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="com.vv.domain.Research" table="report">
+		<id name="res_id" column="res_id">
+			<!-- 主键生成策略（手动生成） -->
+			<generator class="assigned"></generator>
+		</id>
+		<property name="res_name" column="res_name"></property>
+		<property name="res_type" column="res_type"></property>
+		<property name="res_host" column="res_host"></property>
+		<property name="res_content" column="res_content"></property>
+		<property name="res_fund" column="res_fund"></property>
+		<property name="start_time" column="start_time"></property>
+		<property name="end_time" column="end_time"></property>
+		<property name="report_time" column="report_time"></property>
+		<property name="res_status" column="res_status"></property>
+		<property name="upd_status" column="upd_status"></property>
+		
+	</class>
+
+</hibernate-mapping>

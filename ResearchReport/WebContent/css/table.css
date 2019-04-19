@@ -1,0 +1,12 @@
+@charset "UTF-8";
+input{
+	width:100px;
+}
+/* 密码框长度*/
+.input_pw{
+	width:150px;
+}
+/* 提示语字体颜色*/
+.tip_color{
+	color:red;
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+	"http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+	<!-- 动态方法调用 -->
+	<constant name="struts.devMode" value="true"></constant>
+	<constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
+	<!-- 用户信息包-->
+	<package name="user" namespace = "/" extends= "struts-default">
+		<global-allowed-methods>regex:.*</global-allowed-methods>
+		<!-- 登陆查询验证 -->
+		<action name = "UserAction_*" class = "com.vv.web.UserAction" method = "{1}" >
+			<!-- 重定向 -->
+			<result name = "index" type = "redirect">/adm_index.jsp</result>
+			<!-- 默认转发 -->
+			<result name = "login" type = "dispatcher">/login.jsp</result>
+		</action>
+		<!-- 添加用户 -->
+		<action name="AddUserAction_*" class="com.vv.web.AddUserAction" method = "{1}">
+			<!-- 转发 -->
+			<result name = "addUser">/addUser.jsp</result>
+		</action>
+		<!-- 查找个人或全部用户 -->
+		<action name="FindUserAction_*" class="com.vv.web.FindUserAction" method="{1}">
+			<!-- 默认转发 -->
+			<result name = "findUser">/findUser.jsp</result>
+			<result name = "findAllUser">/findAllUser.jsp</result>
+		</action>
+		<!-- 修改、删除用户信息及修改密码 -->
+		<action name="UpdateUserAction_*" class="com.vv.web.UpdateUserAction" method="{1}">
+			<result name="findUser">/findUser.jsp</result>
+			<result name="findAllUser">/findAllUser.jsp</result>
+			<result name="updatePw">/updatePw.jsp</result>
+		</action>
+		<!--<action name="AddReportAction_*" class="com.vv.web.AddReportAction" method="{1}">
+			<result name="addReport">/addReport.jsp</result>
+		</action>  -->
+	</package>
+	<!-- 科研信息包 -->
+	<package name="research" namespace="/" extends="struts-default">
+		<global-allowed-methods>regex:.*</global-allowed-methods>
+		<action name="AddReportAction_*" class="com.vv.web.AddReportAction" method="{1}">
+			<result name="addReport">/addReport.jsp</result>
+		</action>
+		<action name="FindReportAction_*" class="com.vv.web.FindReportAction" method="{1}">
+			<result name="findReport">/findReport.jsp</result>
+			<result name="updateReport">/updateReport.jsp</result>
+			<result name="findUpdateReport">/findUpdateReport.jsp</result>
+		</action>
+		<action name="UpdateReportAction_*" class="com.vv.web.UpdateReportAction" method="{1}">
+			<result name="updateReport">/updateReport.jsp</result>
+			<result name="findReport">/findReport.jsp</result>
+			<result name="findUpdateReport">/findUpdateReport.jsp</result>
+		</action>
+	</package>
+</struts>

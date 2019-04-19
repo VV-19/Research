@@ -1,0 +1,79 @@
+@charset "UTF-8";
+/*登陆表单模块*/
+/*透明块*/
+.a{
+	height: 350px;
+	width: 400px;
+	margin:auto;
+	margin-right: 80px;
+	background-color: #ffffff;
+	border: 1px solid white;
+	opacity:0.6;
+}
+/*文本框间距及字体大小*/
+.b{
+	margin-top:5px;
+}
+.c{
+	font-size:25px;
+}
+/* 修改密码左边距*/
+.updatepw{
+	margin-left: 200px;
+}
+/*文本框大小*/
+.select{
+	width: 90px;
+	font-size:20px;
+}
+.text{
+	width:180px;
+	font-size:20px;
+}
+.button{
+	height:50px;
+	width:300px;
+	font-size:25px;
+	margin-top:10px;
+	background-color:#436EEE;
+	border: 1px solid #436EEE;
+	border-radius: 60px;
+}
+form{
+	height: 380px;
+	width: 380px;
+	margin:auto;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left:40px;
+}
+
+/*系统名字体*/
+.type{
+	margin-top:50px;
+	font-weight: 900;
+	font-size: 60px;
+	font-style: oblique;
+	color: white;
+}
+.title{
+	margin-top:30px;
+	margin-left:20px;
+	font-weight: 1000;
+	font-size:40px;
+	color: #000000;
+}
+
+/*背景图设置*/
+body {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-attachment: fixed;
+}
+/*执行结果提示语*/
+.d{
+	color: red;
+	font-size: 25px;
+}
+
+
