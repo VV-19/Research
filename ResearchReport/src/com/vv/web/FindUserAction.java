@@ -13,6 +13,7 @@ public class FindUserAction extends ActionSupport implements ModelDriven<Teacher
 	Teacher teacher = new Teacher();
 	String tips;
 	boolean success;
+	//查询用户信息
 	public String findMessage() throws Exception{
 		System.out.println("表单提交的====="+teacher.getId());
 		ActionContext.getContext().getSession().put("permission", teacher.getPermission());
@@ -25,6 +26,7 @@ public class FindUserAction extends ActionSupport implements ModelDriven<Teacher
 		System.out.println("返回findUser.jsp");
 		return "findUser";
 	}
+	//全部用户信息列表
 	public String findAllUser() throws Exception{
 		ActionContext.getContext().getSession().put("permission", teacher.getPermission());
 		teacher.setPermission((String)ServletActionContext.getRequest().getSession().getAttribute("permission"));
@@ -33,6 +35,29 @@ public class FindUserAction extends ActionSupport implements ModelDriven<Teacher
 		success = findUserService.findAllUser(teacher);
 		return "findAllUser";
 	}
+	//按ID查询
+	public String findUserById() throws Exception{
+		Teacher user = (Teacher) ActionContext.getContext().getSession().get("user");
+		System.out.println("findUserById==="+user.getPermission());
+		System.out.println("findUserById==="+user.getUsername());
+		teacher.setPermission(user.getPermission());
+		teacher.setId(user.getId());
+		FindUserService findUserService = new FindUserService();
+		success = findUserService.findMessage(teacher);
+		return "findUserById";
+	}
+	//按ID先查再改
+	public String updateUserById() throws Exception{
+		Teacher user = (Teacher) ActionContext.getContext().getSession().get("user");
+		System.out.println("findUserById==="+user.getPermission());
+		System.out.println("findUserById==="+user.getUsername());
+		teacher.setPermission(user.getPermission());
+		teacher.setId(user.getId());
+		FindUserService findUserService = new FindUserService();
+		success = findUserService.findMessage(teacher);
+		return "updateUserById";
+	}
+	
 	@Override
 	public Teacher getModel() {
 		// TODO Auto-generated method stub

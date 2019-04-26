@@ -54,7 +54,7 @@ public class UpdateReportAction extends ActionSupport implements ModelDriven<Res
 			tips="修改报告权限申请成功，等待管理员审核通过后可修改";
 		}	
 		ActionContext.getContext().put("tips", tips);
-		return "findReport";
+		return "findReportById";
 	}
 	
 	//提交审核结果

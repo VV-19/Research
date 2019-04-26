@@ -49,7 +49,7 @@ public class ReportDao {
 			pstmt.setString(8, end_time);
 			pstmt.setDate(9, new Date(System.currentTimeMillis()));
 			pstmt.setString(10, "已提交");
-			pstmt.setString(11, "否");
+			pstmt.setString(11, "无");
 			int rs1 = pstmt.executeUpdate();
 			
 			String sql2 = "insert into participant"
@@ -115,12 +115,53 @@ public class ReportDao {
 		}finally {
 			C3p0DataSource.close(rs, pstmt, conn);
 		}
-		
+	}
+	//查询指定教师全部项目
+	public List<Research> findReportById(Research research) {
+		int i = 1;
+		conn = C3p0DataSource.getConnection();
+		List<Research> researchList = new ArrayList<Research>();
+		Research res = null;
+		sql = "select * from report inner join participant on report.res_id=participant.res_id where (report.res_id=? or res_name like ?) and tea_id=?";
+//		sql = "select * from report inner join participant on report.res_id=participant.res_id where end_time>=? and end_time<? and (tea_id=? or part_user like ?)";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, research.getRes_id());
+			pstmt.setString(2, "%"+research.getRes_id()+"%");
+			System.out.println("getTea_id==="+research.getTea_id());
+			pstmt.setString(3, research.getTea_id());
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				res = new Research();
+				res.setNumber(i++);
+				res.setRes_id(rs.getString(2));
+				res.setRes_name(rs.getString(3));
+				res.setRes_type(rs.getString(4));
+				res.setRes_host(rs.getString(5));
+				res.setRes_content(rs.getString(6));
+				res.setRes_fund(rs.getDouble(7));
+				res.setStart_time(rs.getDate(8));
+				res.setEnd_time(rs.getDate(9));
+				res.setReport_time(rs.getDate(10));		
+				res.setRes_status(rs.getString(11));
+				res.setUpd_status(rs.getString(12));
+				res.setTea_id(rs.getString(15));
+				res.setPart_user(rs.getString(16));
+				researchList.add(res);
+			}
+			System.out.println("researchList=="+researchList);
+			return researchList;
+		} catch (SQLException e) {
+			System.out.println("sql出问题了");
+			return null;
+		}finally {
+			C3p0DataSource.close(rs, pstmt, conn);
+		}
 	}
 	//查询项目信息
 	public List<Research> find(Research research) {
 		Research findResearch = null;
-		List<Research> list = new ArrayList<>();
+		List<Research> list = new ArrayList<Research>();
 		conn = C3p0DataSource.getConnection();
 		sql="SELECT * FROM report inner join participant on report.res_id=participant.res_id where participant.res_id=?;";
 		try {
@@ -157,6 +198,54 @@ public class ReportDao {
 		}
 
 	}
+	//按日期及姓名查询项目信息
+	public List<Research> findReportByTime(Research research) {
+		System.out.println("Dao进来了");
+		Research findResearch = null;
+		int i = 1;
+		List<Research> list = new ArrayList<Research>();
+		conn = C3p0DataSource.getConnection();
+		sql = "select * from report inner join participant on report.res_id=participant.res_id where end_time>=? and end_time<? and (tea_id=? or part_user like ?)";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, research.getStart_Date());
+			pstmt.setString(2, research.getStop_Date());
+			pstmt.setString(3, research.getTea_id());
+			pstmt.setString(4, "%"+research.getTea_id()+"%");
+			rs = pstmt.executeQuery();
+			System.out.println("Dao中的rs==="+rs);
+			while(rs.next()){
+				findResearch = new Research();
+				findResearch.setNumber(i++);
+				findResearch.setRes_id(rs.getString(2));
+				findResearch.setRes_name(rs.getString(3));
+				findResearch.setRes_type(rs.getString(4));
+				findResearch.setRes_host(rs.getString(5));
+				findResearch.setRes_content(rs.getString(6));
+				findResearch.setRes_fund(rs.getDouble(7));				
+				findResearch.setStart_time(rs.getDate(8));
+				findResearch.setEnd_time(rs.getDate(9));
+				findResearch.setReport_time(rs.getDate(10));		
+				findResearch.setRes_status(rs.getString(11));
+				findResearch.setUpd_status(rs.getString(12));
+				findResearch.setTea_id(rs.getString(15));
+				findResearch.setPart_user(rs.getString(16));
+				findResearch.setEducation(rs.getString(17));
+				findResearch.setRating(rs.getString(18));
+				findResearch.setUnit(rs.getString(19));
+				findResearch.setEffect(rs.getString(20));
+				list.add(findResearch);
+				System.out.println("Dao中的==="+list);
+			}
+			return list;
+		} catch (SQLException e) {
+			return null;
+		}finally {
+			C3p0DataSource.close(rs, pstmt, conn);
+		}
+	}
+
 	//修改项目信息
 	public int updateReport(Research research) {
 		conn = C3p0DataSource.getConnection();
@@ -234,16 +323,14 @@ public class ReportDao {
 			pstmt = conn.prepareStatement(sql);
 			System.out.println("id==="+research.getRes_id());
 			if(research.getResult().equals("yes")) {
-			pstmt.setString(1, "可修改");
-			pstmt.setString(2, "无");
+				pstmt.setString(1, "可修改");
+				pstmt.setString(2, "无");
 			}else {
 				pstmt.setString(1, "已提交");
 				pstmt.setString(2, "未通过");
 			}
 			pstmt.setString(3, research.getRes_id());
-			System.out.println("result====+下一个”");
 			result = pstmt.executeUpdate();
-			System.out.println("result===="+result);
 			return result;
 		} catch (SQLException e) {
 			return 0;
@@ -251,6 +338,50 @@ public class ReportDao {
 			C3p0DataSource.close(rs, pstmt, conn);
 		}
 
+	}
+	public List<Research> countReportById(Research research) {
+		Research findResearch = null;
+		int i = 1;
+		List<Research> list = new ArrayList<Research>();
+		conn = C3p0DataSource.getConnection();
+		sql = "select * from report inner join participant on report.res_id=participant.res_id where end_time>=? and end_time<? and tea_id=?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, research.getStart_Date());
+			pstmt.setString(2, research.getStop_Date());
+			pstmt.setString(3, research.getTea_id());
+			rs = pstmt.executeQuery();
+			System.out.println("Dao中的rs==="+rs);
+			while(rs.next()){
+				findResearch = new Research();
+				findResearch.setNumber(i++);
+				findResearch.setRes_id(rs.getString(2));
+				findResearch.setRes_name(rs.getString(3));
+				findResearch.setRes_type(rs.getString(4));
+				findResearch.setRes_host(rs.getString(5));
+				findResearch.setRes_content(rs.getString(6));
+				findResearch.setRes_fund(rs.getDouble(7));				
+				findResearch.setStart_time(rs.getDate(8));
+				findResearch.setEnd_time(rs.getDate(9));
+				findResearch.setReport_time(rs.getDate(10));		
+				findResearch.setRes_status(rs.getString(11));
+				findResearch.setUpd_status(rs.getString(12));
+				findResearch.setTea_id(rs.getString(15));
+				findResearch.setPart_user(rs.getString(16));
+				findResearch.setEducation(rs.getString(17));
+				findResearch.setRating(rs.getString(18));
+				findResearch.setUnit(rs.getString(19));
+				findResearch.setEffect(rs.getString(20));
+				list.add(findResearch);
+				System.out.println("Dao中的==="+list);
+			}
+			return list;
+		} catch (SQLException e) {
+			return null;
+		}finally {
+			C3p0DataSource.close(rs, pstmt, conn);
+		}
 	}
 
 }

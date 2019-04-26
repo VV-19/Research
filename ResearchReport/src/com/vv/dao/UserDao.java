@@ -6,12 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.struts2.ServletActionContext;
-
 import com.vv.datasource.C3p0DataSource;
 import com.vv.domain.Teacher;
-import com.vv.domain.User;
 
 public class UserDao {
 	Connection conn = null;
@@ -21,30 +17,32 @@ public class UserDao {
 	String tableName;
 	int result = 0;
 	//用户登陆
-	public User findUser(User user) {
+	public Teacher findUser(Teacher teacher) {
 
-		User users = new User();
+		Teacher teachers = new Teacher();
 		try {
 			conn = C3p0DataSource.getConnection();
-			tableName = user.getPermission();
+			tableName = teacher.getPermission();
 			System.out.println(tableName);
 			String sql = "";
 			if(tableName.equals("admins")){
+				System.out.println("执行admins");
 				sql = "select * from admins where adm_username = ? and adm_password = ?";
 			}else {
 				sql = "select * from teacher where tea_username = ? and tea_password = ?";
 			}
-			System.out.println(sql);
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, user.getUsername());
-			pstmt.setString(2, user.getPassword());
+			pstmt.setString(1, teacher.getUsername());
+			pstmt.setString(2, teacher.getPassword());
 			rs = pstmt.executeQuery();
-			System.out.println("结果集"+rs);
 			if(rs.next()) {
-				users.setPermission(tableName);
-				users.setUsername(rs.getString(4));
-				users.setPassword(rs.getString(5));
-				return users;
+				teachers.setPermission(tableName);
+				teachers.setId(rs.getString(2));
+				teachers.setName(rs.getString(3));
+				teachers.setUsername(rs.getString(4));
+				teachers.setPassword(rs.getString(5));
+				System.out.println("teachers==="+teachers);
+				return teachers;
 			}
 				return null;
 		}catch(Exception e) {
@@ -53,6 +51,7 @@ public class UserDao {
 			C3p0DataSource.close(rs, pstmt, conn);
 		}
 	}
+	
 	//添加用户
 	public int addUser(Teacher teacher) {
 		System.out.println("addUserDao");
@@ -61,7 +60,6 @@ public class UserDao {
 		String sql;
 		try {
 			if(tableName.equals("admins")) {
-				System.out.println("向"+tableName+"表中插入一条数据");
 				sql="insert into admins(adm_id,adm_name,adm_username,adm_password,telephone,email) values(?,?,?,?,?,?)";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, teacher.getId());
@@ -71,12 +69,10 @@ public class UserDao {
 				pstmt.setString(5, teacher.getTelephone());
 				pstmt.setString(6, teacher.getEmail());
 			}else {
-				System.out.println("向"+tableName+"表中插入一条数据");
 				sql="insert into teacher(tea_id,tea_name,tea_username,tea_password,college,telephone,email,education,rating) values(?,?,?,?,?,?,?,?,?)";
 				System.out.println(sql);
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, teacher.getId());
-				System.out.println("不输入数据时==="+teacher.getId());
 				pstmt.setString(2, teacher.getName());
 				pstmt.setString(3, teacher.getUsername());
 				pstmt.setString(4, teacher.getPassword());
@@ -97,6 +93,7 @@ public class UserDao {
 			C3p0DataSource.close(rs, pstmt, conn);
 		}
 	}
+	
 	//查询单个用户
 	public Teacher findUserMessage(Teacher teacher) {
 		System.out.println("UserDao中的===="+teacher.getId());
@@ -155,9 +152,11 @@ public class UserDao {
 			C3p0DataSource.close(rs, pstmt, conn);
 		}
 	}
+	
 	//修改用户信息
 	public int updateUser(Teacher teacher) {
 		conn = C3p0DataSource.getConnection();
+		System.out.println(teacher.getPermission());
 		tableName=teacher.getPermission();
 		System.out.println("tableName===="+tableName);
 		try {
@@ -191,6 +190,7 @@ public class UserDao {
 			C3p0DataSource.close(rs, pstmt, conn);
 		}
 	}
+	
 	//查询全部用户
 	public List<Teacher> findAllUser(Teacher teacher) {
 		List<Teacher> list = new ArrayList<Teacher>();
@@ -241,6 +241,7 @@ public class UserDao {
 			C3p0DataSource.close(rs, pstmt, conn);
 		}
 	}
+	
 	//删除用户
 	public int deleteUser(Teacher teacher) {
 		conn=C3p0DataSource.getConnection();

@@ -17,7 +17,6 @@ public class Research {
 	private String res_status;	//报告状态
 	private String upd_status;	//修改权限
 	private int number;			//科研报告序号
-	private String semester;	//学期号
 	
 	private String tea_id;		//参与者工号
 	private String part_user;	//参与者
@@ -27,11 +26,54 @@ public class Research {
 	private String effect;		//贡献
 	private String result;      //审核结果
 	
+	private int year;			//学年
+	private String semester;	//学期号
+	private String start_Date;	//学年开始
+	private String stop_Date;	//学年结束
+	private String file_name;	//xsl文件名
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return super.toString();
 	}
+	public String getFile_name() {
+		return file_name;
+	}
+	public void setFile_name(String file_name) {
+		this.file_name = file_name;
+	}
+	//按日期查询的属性
+	public String getSemester() {
+		return semester;
+	}
+	public void setSemester(String semester) {
+		this.semester = semester;
+	}
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
+	}
+	
+	public String getStart_Date() {
+		return start_Date;
+	}
+
+	public void setStart_Date(String start_Date) {
+		this.start_Date = start_Date;
+	}
+
+	public String getStop_Date() {
+		return stop_Date;
+	}
+
+	public void setStop_Date(String stop_Date) {
+		this.stop_Date = stop_Date;
+	}
+	
+	//科研报告属性
 	public String getResult() {
 		return result;
 	}

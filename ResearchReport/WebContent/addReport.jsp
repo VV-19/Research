@@ -4,15 +4,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<title>科研项目录入</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>科研项目录入</title>
+  <link rel="stylesheet" href="layui/css/layui.css">
 </head>
-<body>
-	<div style = "color:red"><s:property value="tips"/></div>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  
+  <div class="layui-header">
+    <div class="layui-logo">科研管理系统教师界面</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item"><a href="LogOutAction_logOut">注销</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">用户信息</a>
+          <dl class="layui-nav-child">
+            <dd><a href="FindUserAction_findUserById">我的信息</a></dd>
+            <dd><a href="FindUserAction_updateUserById">修改信息</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">科研信息管理</a>
+          <dl class="layui-nav-child">
+            <dd><a href="addReport.jsp">新建科研项目</a></dd>
+            <dd><a href="findReportById.jsp">查询科研项目</a></dd>
+            <dd><a href="countReportById.jsp">统计科研项目</a></dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style = "color:red"><s:property value="tips"/></div>
+    <div style = "margin-top:10px">
 	<form action="${pageContext.request.contextPath}/AddReportAction_addReport" method="post">
-	<table style="table-layout:fixed;" border=1; width="900px"; cellpadding=8; cellspacing=0; align=center>
-		<tr align=center>
-			<td colspan="7">科研项目信息表</td>
+	<table style="table-layout:fixed; margin-top:10px; margin:auto;width:900px; font-size:20px">
+		<tr>
+			<th colspan="7" style="height:40px;font-size:25px">科研项目信息表</th>
 		</tr>
 		<tr align=center>
 			<td colspan="1">项目名称:</td>
@@ -32,9 +71,9 @@
 		</tr>
 		<tr align=center>
 			<td colspan="1">立项时间:</td>
-			<td colspan="2"><input type="text" name="start_time" placeholder="例：2019-01-01" required="required"/></td>
+			<td colspan="2"><input type="Date" name="start_time" placeholder="例：2019-01-01" required="required"/></td>
 			<td colspan="1">验收时间:</td>
-			<td colspan="3"><input type="text" name="end_time" placeholder="例：2019-01-01" required="required"/></td>
+			<td colspan="3"><input type="Date" name="end_time" placeholder="例：2019-01-01" required="required"/></td>
 
 		</tr>
 		<tr align=center>
@@ -86,43 +125,64 @@
 		<td><input type="text" name="list[4].unit" id="unit4"></td>
 		<td><input type="text" name="list[4].effect" id="effect4"></td>
 		</tr>
-		
-		<tr><td align="center" colspan="7">
-		<div align="center" class="layui-form-item layui-form-text">
-     		<div align="center" class="layui-input-block">
-     			<div align="center" class="editor">
-     				<textarea id="content" name="res_content" placeholder="科研报告内容" style="width:890px;height:600px"></textarea>
-  	 			</div>
-     		</div>
-    	</div>
-		</td></tr>
-		
+
 		<tr>
-			<td colspan="7" align=center><button align=center type="submit" name="request">确定</button></td>
+			<td colspan="7">
+			<div class="layui-form-item layui-form-text">
+			<div class="editor">
+				<textarea id="content" name="res_content" placeholder="科研报告内容"
+						  style="width:900px; height:600px;">
+					<s:property value="#request.list[0].res_content" />
+				</textarea>
+			</div>
+			</div>
+			</td>
+		</tr>
+
+		<tr>
+			<td colspan="7" align=center><button class="layui-btn layui-btn-lg"
+				 type="submit" name="request">确定</button></td>
 		</tr>
 	</table>
 	</form>
+	</div>
 	<style type="text/css">
 		table,th,td{
 			border:1px solid #328AA4;
 		}
 		td input{
 			border:none;
-			width:100%;
+			width:90%;
+			height:40px;
 			font-size:25px;
+			margin-left:2px;
 		}
 	</style>
-<script type="text/javascript" charset="utf-8" src="js/kindeditor.js"></script>
-<script type="text/javascript">
-    KE.show({
-        id : 'content',
-		resizeMode : 1,
-        cssPath : './index.css',
-        items : [
-        'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold', 'italic', 'underline',
-        'removeformat', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-        'insertunorderedlist']
-   			 });
+	<script type="text/javascript" charset="utf-8" src="js/kindeditor.js"></script>
+	<script type="text/javascript">
+		KE.show({
+			id : 'content',
+			resizeMode : 1,
+			cssPath : './index.css',
+			items : [ 'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold',
+					'italic', 'underline', 'removeformat', 'justifyleft',
+					'justifycenter', 'justifyright', 'insertorderedlist',
+					'insertunorderedlist' ]
+		});
+	</script>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+  </div>
+</div>
+<script src="layui/layui.js"></script>
+<script>
+//JavaScript代码区域
+layui.use('element', function(){
+  var element = layui.element;
+  
+});
 </script>
 </body>
 </html>

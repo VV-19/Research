@@ -1,20 +1,27 @@
 package com.vv.web;
 
+import java.util.Map;
+
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
-import com.vv.domain.User;
+import com.vv.domain.Teacher;
 import com.vv.service.UserService;
 
-public class UserAction extends ActionSupport implements ModelDriven<User>{
+public class UserAction extends ActionSupport implements ModelDriven<Teacher>{
 	
-	User user = new User();
+	Teacher teacher = new Teacher();
 	public String login() throws Exception {
 		
 		UserService userService = new UserService();
-		boolean isSuccess = userService.findUser(user);
+		boolean isSuccess = userService.findUser(teacher);
+		System.out.println("teacher.getPermission()==="+teacher.getPermission());
 		if(isSuccess) {
-			return "index";
+			if(teacher.getPermission().equals("admins")) {
+				return "adm_index";
+			}else {
+				return "tea_index";
+			}
 		}else {
 			ActionContext.getContext().put("error","用户名或密码错误" );
 			return "login";
@@ -22,8 +29,8 @@ public class UserAction extends ActionSupport implements ModelDriven<User>{
 	}
 
 	@Override
-	public User getModel() {
-		return user;
+	public Teacher getModel() {
+		return teacher;
 	}
 	
 }

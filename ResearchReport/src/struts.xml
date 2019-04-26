@@ -8,11 +8,34 @@
 	<constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
 	<!-- 用户信息包-->
 	<package name="user" namespace = "/" extends= "struts-default">
+		<!-- 配置拦截器 -->
+		<interceptors>
+			<!-- 注册拦截器 -->
+			<interceptor name="UserIntercept" class="com.vv.web.intercept.UserIntercept"></interceptor>
+			<!-- 注册拦截器栈 -->
+			<interceptor-stack name="myStack">
+				<!-- 引入自己的拦截器 -->
+				<interceptor-ref name="UserIntercept">
+					<!-- 声明不过拦截器的方法 -->
+					<param name="excludeMethods">login</param>
+				</interceptor-ref>
+				<!-- 引入Struts自带拦截器 -->
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<!-- 指定自己的拦截器栈 -->
+		<default-interceptor-ref name="myStack"></default-interceptor-ref>
+		<!-- 配置全局结果集 -->
+		<global-results>
+			<result name="login" type="redirect">/login.jsp</result>
+		</global-results>
+		<!-- 配置通配符：使用正则 -->
 		<global-allowed-methods>regex:.*</global-allowed-methods>
 		<!-- 登陆查询验证 -->
 		<action name = "UserAction_*" class = "com.vv.web.UserAction" method = "{1}" >
 			<!-- 重定向 -->
-			<result name = "index" type = "redirect">/adm_index.jsp</result>
+			<result name = "adm_index" type = "redirect">/adm_index.jsp</result>
+			<result name = "tea_index" type = "redirect">/tea_index.jsp</result>
 			<!-- 默认转发 -->
 			<result name = "login" type = "dispatcher">/login.jsp</result>
 		</action>
@@ -26,32 +49,65 @@
 			<!-- 默认转发 -->
 			<result name = "findUser">/findUser.jsp</result>
 			<result name = "findAllUser">/findAllUser.jsp</result>
+			<result name = "findUserById">/findUserById.jsp</result>
+			<result name = "updateUserById">/updateUserById.jsp</result>
+			
 		</action>
 		<!-- 修改、删除用户信息及修改密码 -->
 		<action name="UpdateUserAction_*" class="com.vv.web.UpdateUserAction" method="{1}">
 			<result name="findUser">/findUser.jsp</result>
+			<result name="findUserById">/findUserById.jsp</result>
 			<result name="findAllUser">/findAllUser.jsp</result>
 			<result name="updatePw">/updatePw.jsp</result>
 		</action>
-		<!--<action name="AddReportAction_*" class="com.vv.web.AddReportAction" method="{1}">
-			<result name="addReport">/addReport.jsp</result>
-		</action>  -->
+		<!-- 用户注销 -->
+		<action name="LogOutAction_*" class="com.vv.web.LogOutAction" method="{1}">
+			<result name = "logOut">/logOut.jsp</result>
+		</action>
 	</package>
 	<!-- 科研信息包 -->
 	<package name="research" namespace="/" extends="struts-default">
+		<!-- 配置拦截器 -->
+		<interceptors>
+			<!-- 注册拦截器 -->
+			<interceptor name="UserIntercept" class="com.vv.web.intercept.UserIntercept"></interceptor>
+			<!-- 注册拦截器栈 -->
+			<interceptor-stack name="myStack">
+				<!-- 引入自己的拦截器 -->
+				<interceptor-ref name="UserIntercept">
+					<!-- 声明不过拦截器的方法 -->
+					<param name="excludeMethods">login</param>
+				</interceptor-ref>
+				<!-- 引入Struts自带拦截器 -->
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<!-- 指定自己的拦截器栈 -->
+		<default-interceptor-ref name="myStack"></default-interceptor-ref>
+		<!-- 配置全局结果集 -->
+		<global-results>
+			<result name="login" type="redirect">/login.jsp</result>
+		</global-results>
 		<global-allowed-methods>regex:.*</global-allowed-methods>
 		<action name="AddReportAction_*" class="com.vv.web.AddReportAction" method="{1}">
 			<result name="addReport">/addReport.jsp</result>
 		</action>
 		<action name="FindReportAction_*" class="com.vv.web.FindReportAction" method="{1}">
 			<result name="findReport">/findReport.jsp</result>
+			<result name="findReportById">/findReportById.jsp</result>
 			<result name="updateReport">/updateReport.jsp</result>
+			<result name="reportContent">/reportContent.jsp</result>
 			<result name="findUpdateReport">/findUpdateReport.jsp</result>
+			<result name="findReportByTime">/findReportByTime.jsp</result>
+			<result name="countReport">/countReport.jsp</result>
+			<result name="countReportById">/countReportById.jsp</result>
 		</action>
 		<action name="UpdateReportAction_*" class="com.vv.web.UpdateReportAction" method="{1}">
-			<result name="updateReport">/updateReport.jsp</result>
+			<result name="findReportById">/findReportById.jsp</result>
 			<result name="findReport">/findReport.jsp</result>
 			<result name="findUpdateReport">/findUpdateReport.jsp</result>
+			<result name="updateReport">/updateReport.jsp</result>
+			
 		</action>
 	</package>
 </struts>

@@ -14,8 +14,11 @@ public class UpdateUserAction extends ActionSupport implements ModelDriven<Teach
 	Teacher teacher = new Teacher();
 	String tips;
 	ValueStack stack = ActionContext.getContext().getValueStack();
+	//修改用户信息
 	public String updateUser() throws Exception{
-		stack.set("permisssion", teacher.getPermission());
+		String permission = (String)ActionContext.getContext().getSession().get("permission");
+		System.out.println("action中的权限1"+teacher.getPermission());
+		teacher.setPermission(permission);
 		UpdateUserService updateUserService = new UpdateUserService();
 		boolean success = updateUserService.updateUser(teacher);
 		if(!success) {
@@ -26,6 +29,22 @@ public class UpdateUserAction extends ActionSupport implements ModelDriven<Teach
 		ActionContext.getContext().put("tips", tips);
 		return "findUser";
 	}
+	//教师修改信息
+	public String updateTeacher() throws Exception{
+
+		teacher.setPermission("teacher");
+		UpdateUserService updateUserService = new UpdateUserService();
+		boolean success = updateUserService.updateUser(teacher);
+		if(!success) {
+			tips="修改失败";
+		}else {
+			tips="修改成功";
+		}
+		ActionContext.getContext().put("tips", tips);
+		return "findUserById";
+	}
+	
+	//删除用户信息
 	public String deleteUser() throws Exception{
 
 		teacher.setPermission((String)ServletActionContext.getRequest().getSession().getAttribute("permission"));
@@ -42,10 +61,9 @@ public class UpdateUserAction extends ActionSupport implements ModelDriven<Teach
 		ActionContext.getContext().put("tips", tips);
 		return "findAllUser";
 	}
+	//修改用户密码
 	public String updatePassword() throws Exception{
-		System.out.println("Username==="+teacher.getUsername());
-		System.out.println("Password==="+teacher.getPassword());
-		System.out.println("Newpassword==="+teacher.getNewpassword());
+
 		stack.set("permisssion", teacher.getPermission());
 		UpdateUserService updatePw = new UpdateUserService();
 		boolean success = updatePw.updatePassword(teacher);
@@ -59,7 +77,7 @@ public class UpdateUserAction extends ActionSupport implements ModelDriven<Teach
 	}
 	
 	@Override	
-public Teacher getModel() {
+	public Teacher getModel() {
 		// TODO Auto-generated method stub
 		return teacher;
 	}

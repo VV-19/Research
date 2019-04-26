@@ -4,7 +4,6 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 import com.vv.domain.Teacher;
-import com.vv.domain.User;
 import com.vv.service.AddService;
 
 public class AddUserAction extends ActionSupport implements ModelDriven<Teacher>{
